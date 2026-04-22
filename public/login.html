@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grooming Sprint Poker – Shift4</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--bg:#0F1117;--surface:#181B24;--surface2:#1E2130;--surface3:#252A3A;--border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);--text:#F0F0F0;--text2:#9BA3B8;--text3:#5C6480;--blue:#1B6EF3;--blue-hover:#1558CC;--blue-light:rgba(27,110,243,0.12);--red:#E53E3E;--font:'Inter',sans-serif;--radius:8px;--radius-lg:12px;}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1.5rem 1rem;-webkit-font-smoothing:antialiased;}
+.wrap{width:100%;max-width:420px;}
+.logo-block{text-align:center;margin-bottom:2rem;}
+.app-label{font-size:12px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;margin-top:10px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:2rem;}
+.card-title{font-size:18px;font-weight:700;color:var(--text);margin-bottom:4px;letter-spacing:-0.3px;}
+.card-sub{font-size:13px;color:var(--text2);margin-bottom:1.5rem;}
+.mode-toggle{display:flex;background:var(--surface2);border-radius:var(--radius);padding:3px;margin-bottom:1.5rem;}
+.mode-btn{flex:1;padding:8px;font-size:13px;font-weight:500;font-family:var(--font);border:none;border-radius:6px;cursor:pointer;background:transparent;color:var(--text2);transition:all 0.15s;}
+.mode-btn.active{background:var(--surface3);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,0.3);}
+.field{margin-bottom:1rem;}
+.field label{display:block;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px;letter-spacing:0.02em;text-transform:uppercase;}
+.field input{width:100%;padding:10px 12px;font-size:14px;font-family:var(--font);border:1px solid var(--border2);border-radius:var(--radius);background:var(--surface2);color:var(--text);transition:border-color 0.15s,box-shadow 0.15s;}
+.field input::placeholder{color:var(--text3);}
+.field input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(27,110,243,0.15);}
+.divider-row{display:flex;align-items:center;gap:10px;margin:1.25rem 0;}
+.divider-line{flex:1;height:1px;background:var(--border);}
+.divider-text{font-size:12px;color:var(--text3);white-space:nowrap;}
+.pref-list{display:flex;flex-direction:column;gap:6px;margin-bottom:1.25rem;}
+.pref-item{display:flex;align-items:center;gap:10px;padding:9px 11px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;}
+.pref-item:hover{border-color:var(--border2);}
+.pref-item input[type="checkbox"]{width:15px;height:15px;accent-color:var(--blue);cursor:pointer;flex-shrink:0;}
+.pref-label{font-size:13px;color:var(--text);}
+.pref-sub{font-size:11px;color:var(--text3);}
+.btn{width:100%;padding:11px;font-size:14px;font-weight:600;font-family:var(--font);border:none;border-radius:var(--radius);cursor:pointer;transition:all 0.15s;}
+.btn-blue{background:var(--blue);color:white;}
+.btn-blue:hover{background:var(--blue-hover);}
+.btn:active{transform:scale(0.99);}
+.error{font-size:13px;color:var(--red);text-align:center;margin-top:8px;display:none;}
+.guest-hint{margin-top:1.25rem;padding:10px 12px;background:var(--blue-light);border:1px solid rgba(27,110,243,0.2);border-radius:var(--radius);font-size:12px;color:var(--text2);line-height:1.5;}
+.guest-hint strong{color:var(--text);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="logo-block">
+    <svg width="130" height="28" viewBox="0 0 130 28" xmlns="http://www.w3.org/2000/svg">
+      <text x="0" y="22" font-family="Inter,sans-serif" font-size="22" font-weight="700" letter-spacing="3" fill="#FFFFFF">SHIFT</text>
+      <circle cx="114" cy="14" r="13" fill="#1B6EF3"/>
+      <text x="114" y="19" font-family="Inter,sans-serif" font-size="14" font-weight="700" fill="white" text-anchor="middle">4</text>
+    </svg>
+    <div class="app-label">Grooming Sprint Poker</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title" id="card-title">Welcome</div>
+    <div class="card-sub" id="card-sub">Sign in with your Shift4 account or join as a guest</div>
+
+    <div class="mode-toggle">
+      <button class="mode-btn active" onclick="setMode('guest')" id="btn-mode-guest">Join as guest</button>
+      <button class="mode-btn" onclick="setMode('signin')" id="btn-mode-signin">Sign in</button>
+    </div>
+
+    <div id="guest-form">
+      <div class="field">
+        <label>Your name</label>
+        <input type="text" id="guest-name" placeholder="e.g. Jonas Jonaitis" autocomplete="name" />
+      </div>
+      <button class="btn btn-blue" onclick="guestJoin()">Continue →</button>
+      <div class="guest-hint"><strong>Guest access</strong> — you can vote and comment without a Shift4 account.</div>
+    </div>
+
+    <div id="signin-form" style="display:none;">
+      <div class="field">
+        <label>Username</label>
+        <input type="text" id="signin-username" placeholder="Enter username" autocomplete="username" />
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input type="password" id="signin-password" placeholder="Enter password" autocomplete="current-password" />
+      </div>
+      <div class="divider-row"><div class="divider-line"></div><div class="divider-text">Session preferences</div><div class="divider-line"></div></div>
+      <div class="pref-list">
+        <label class="pref-item">
+          <input type="checkbox" id="pref-name" checked />
+          <div><div class="pref-label">Task name</div><div class="pref-sub">Show Jira task title</div></div>
+        </label>
+        <label class="pref-item">
+          <input type="checkbox" id="pref-desc" checked />
+          <div><div class="pref-label">Description</div><div class="pref-sub">Show collapsible Jira description</div></div>
+        </label>
+        <label class="pref-item">
+          <input type="checkbox" id="pref-comments" checked />
+          <div><div class="pref-label">Comments</div><div class="pref-sub">Enable open questions section</div></div>
+        </label>
+      </div>
+      <button class="btn btn-blue" onclick="signIn()">Sign in →</button>
+    </div>
+
+    <div class="error" id="error-msg"></div>
+  </div>
+</div>
+
+<script>
+  let currentMode = 'guest';
+  const joinId = new URLSearchParams(location.search).get('join');
+
+  if (joinId) {
+    document.getElementById('card-sub').textContent = "You've been invited to a grooming session. Enter your name or sign in.";
+  }
+
+  function setMode(mode) {
+    currentMode = mode;
+    document.getElementById('btn-mode-guest').classList.toggle('active', mode === 'guest');
+    document.getElementById('btn-mode-signin').classList.toggle('active', mode === 'signin');
+    document.getElementById('guest-form').style.display = mode === 'guest' ? 'block' : 'none';
+    document.getElementById('signin-form').style.display = mode === 'signin' ? 'block' : 'none';
+    document.getElementById('error-msg').style.display = 'none';
+  }
+
+  async function guestJoin() {
+    const name = document.getElementById('guest-name').value.trim();
+    const err = document.getElementById('error-msg');
+    if (!name || name.length < 2) { err.textContent = 'Please enter your name'; err.style.display = 'block'; return; }
+    const res = await fetch('/auth/guest', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name }) });
+    const data = await res.json();
+    if (data.error) { err.textContent = data.error; err.style.display = 'block'; return; }
+    localStorage.setItem('gsp-user', JSON.stringify(data.user));
+    window.location.href = joinId ? `/?join=${joinId}` : '/';
+  }
+
+  async function signIn() {
+    const username = document.getElementById('signin-username').value.trim();
+    const password = document.getElementById('signin-password').value.trim();
+    const err = document.getElementById('error-msg');
+    const settings = {
+      showName: document.getElementById('pref-name').checked,
+      showDescription: document.getElementById('pref-desc').checked,
+      showComments: document.getElementById('pref-comments').checked
+    };
+    localStorage.setItem('gsp-settings', JSON.stringify(settings));
+    const res = await fetch('/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username, password }) });
+    const data = await res.json();
+    if (data.error) { err.textContent = 'Invalid username or password'; err.style.display = 'block'; return; }
+    localStorage.setItem('gsp-user', JSON.stringify(data.user));
+    window.location.href = joinId ? `/?join=${joinId}` : '/';
+  }
+
+  document.addEventListener('keydown', e => { if (e.key === 'Enter') { if (currentMode === 'guest') guestJoin(); else signIn(); } });
+</script>
+</body>
+</html>

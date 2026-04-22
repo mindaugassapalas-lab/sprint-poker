@@ -1,0 +1,15 @@
+{
+  "name": "grooming-sprint-poker",
+  "version": "3.0.0",
+  "description": "Grooming Sprint Poker – Shift4 Payments Internal Tool",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "ws": "^8.16.0",
+    "uuid": "^9.0.0"
+  }
+}
